@@ -1,0 +1,100 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "FastAPI - Uvicorn",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "src.api.api:app",
+                "--reload",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000"
+            ],
+            "jinja": true,
+            "justMyCode": true,
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Streamlit Chat",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "streamlit",
+            "args": [
+                "run",
+                "src/web/chat.py",
+                "--server.port",
+                "8585",
+                "--server.address",
+                "0.0.0.0"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "MCP Server - DuckDuckGo",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.mcp_servers.duckduckgo_mcp_server.server",
+            "justMyCode": true,
+            "jinja": true,
+            "args": [
+                "--transport",
+                "streamable-http",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8001",
+                "--path",
+                "/mcp"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "MCP Server - YFinance",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.mcp_servers.yfinance_mcp_server.server",
+            "justMyCode": true,
+            "jinja": true,
+            "args": [
+                "--transport",
+                "streamable-http",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8001",
+                "--path",
+                "/mcp"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+
+
+    ]
+}
