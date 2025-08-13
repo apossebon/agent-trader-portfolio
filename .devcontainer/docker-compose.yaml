@@ -1,0 +1,97 @@
+services:
+  pgvector:
+    image: pgvector/pgvector:pg16
+    container_name: agent-trader-pgvector
+    hostname: pgvector
+    environment:
+      POSTGRES_DB: agent_db
+      POSTGRES_USER: user_agent
+      POSTGRES_PASSWORD: pass_agent
+    ports:
+      - "5432:5432"
+    networks:
+      trader-agent:
+        aliases:
+          - pgvector
+          - db
+          - postgres
+    command: |
+      postgres -c log_statement=all
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "psql postgresql://user_agent:pass_agent@localhost:5432/agent_db --command 'SELECT 1;' || exit 1",
+        ]
+      interval: 5s
+      retries: 60
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+      target: base
+    container_name: agent-trader-app
+    hostname: app
+    env_file:
+      - ../.env
+    entrypoint:
+      - sleep
+      - infinity
+    command: []
+    volumes:
+      - ../:/workspaces/agent-trader:cached
+    depends_on:
+      pgvector:
+        condition: service_healthy
+    networks:
+      trader-agent:
+        aliases:
+          - app
+          - api
+    ports:
+      - "8000:8000"
+      - "8585:8585"
+
+  mcp-duckduckgo:
+    build:
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+      target: mcp_servers
+    container_name: agent-trader-mcp-duckduckgo
+    hostname: mcp-duckduckgo
+    ports:
+      - "8001:8001"
+    command: python -m src.mcp_servers.duckduckgo_mcp_server.server --transport streamable-http --host 0.0.0.0 --port 8001
+    networks:
+      trader-agent:
+        aliases:
+          - mcp-duckduckgo
+    depends_on:
+      - app
+
+  mcp-yfinance:
+    build:
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+      target: mcp_servers
+    container_name: agent-trader-mcp-yfinance
+    hostname: mcp-yfinance
+    ports:
+      - "8002:8002"
+    command: python -m src.mcp_servers.yfinance_mcp_server.server --transport streamable-http --host 0.0.0.0 --port 8002
+    networks:
+      trader-agent:
+        aliases:
+          - mcp-yfinance
+    depends_on:
+      - app
+
+networks:
+  trader-agent:
+    driver: bridge
+
+volumes:
+  pgvector_data:

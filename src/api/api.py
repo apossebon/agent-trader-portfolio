@@ -3,12 +3,15 @@ from pydantic import BaseModel
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, Depends
 import logging
-from agents.trader_agent import get_trader_agent
+from src.agents.trader_agent import get_trader_agent
 from langgraph.prebuilt import create_react_agent
 from langchain_core.messages import HumanMessage
 
 # Query request model
 # Represents a request for querying 
+
+from dotenv import load_dotenv
+load_dotenv(override=True)  # Load environment variables from .env file
 
 class QueryRequest(BaseModel):
     question: str
@@ -74,10 +77,15 @@ async def query(request: QueryRequest, agent=Depends(get_agent)):
             async for step, metadata in agent.astream(langchain_input,config=session_cfg, stream_mode="messages"):
                 try:
                     if metadata["langgraph_node"] == "agent" and (text := step.text()):
-                        print(text, end="")
+                        # print(text, end="")
                         yield text
-                    else:
-                        print(f"metadata: {metadata}")
+                    elif metadata["langgraph_node"] == "tools" and (text := step.text()):
+                        print(text, end="")
+                        # yield text
+                    # else:
+                    #     print(f"metadata: {metadata}")
+                    #     print("\n\ntexto")
+                    #     print(text, end="")
                 except Exception as e:
                     print(f"Error processing step: {e}")
                     continue

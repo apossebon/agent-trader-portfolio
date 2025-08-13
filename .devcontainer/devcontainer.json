@@ -1,8 +1,9 @@
 {
   "name": "Agent Trader Dev Container",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/agent-trader",
+  "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {
       "settings": {
@@ -15,9 +16,7 @@
       ]
     }
   },
-  // "postCreateCommand": "uv sync",
+  "postCreateCommand": "uv sync"
   // "remoteUser": "vscode"
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
-  ]
+  // Using docker-compose; workspace will be mounted automatically by Dev Containers.
 }

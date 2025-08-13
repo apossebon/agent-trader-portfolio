@@ -148,6 +148,7 @@ fetcher = WebContentFetcher()
 @mcp.tool()
 async def search(query: str, ctx: Context, max_results: int = 10) -> str:
     """Search in Internet websites with DuckDuckGo and return formatted results. Can also be used to sentiment analysis of companies."""
+    print(f"search: {query}, max_results: {max_results}")
     try:
         results = await searcher.search(query, ctx, max_results)
         return searcher.format_results_for_llm(results)
@@ -158,6 +159,7 @@ async def search(query: str, ctx: Context, max_results: int = 10) -> str:
 @mcp.tool()
 async def fetch_content(url: str, ctx: Context) -> str:
     """Fetch and parse content from a webpage URL."""
+    print(f"fetch_content: {url}")
     return await fetcher.fetch_and_parse(url, ctx)
 
 def parse_args():
