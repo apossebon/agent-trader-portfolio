@@ -25,9 +25,7 @@ class UserMemory(TypedDict):
     user_info: UserInfo  # Informações básicas do usuário (nome)
     user_portfolio: list[UserPortfolio]  # Lista de todas as posições no portfólio
 
-# DATABASE_URL = {
-#     "POSTGRES_URL": os.getenv("DATABASE_URL")
-# }
+
 DATABASE_URL = os.getenv(
     "POSTGRES_URL",
 )

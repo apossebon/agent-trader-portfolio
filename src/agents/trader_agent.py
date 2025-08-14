@@ -147,11 +147,11 @@ async def get_trader_agent(foundation: str = "lmstudio", model: str = "qwen/qwen
         if foundation == "lmstudio":
             user_model = llm_factory.get_LMStudio_llm(model)
         elif foundation == "ollama":
-            pass
+            user_model = llm_factory.get_ollama_llm(model)
         elif foundation == "openai":
-            pass
+            user_model = llm_factory.get_openai_llm(model)
         elif foundation == "genai":
-            pass
+            user_model = llm_factory.get_genai_llm(model)
         else:
             raise ValueError(f"Unsupported foundation: {foundation}")
         

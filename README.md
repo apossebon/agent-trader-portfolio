@@ -1,7 +1,5 @@
 # Agent Trader — Portfolio Assistant (EN)
 
-English overview for international readers. The original PT‑BR section follows below.
-
 ## Overview
 
 - LLM via `LLMFactory` (default: LM Studio) with `streaming=True`.
@@ -17,6 +15,20 @@ English overview for international readers. The original PT‑BR section follows
 1) UI/client → API (`FastAPI`) → Agent (`LangGraph`)
 2) Agent → LLM + MCP tools (DDG/YFinance over HTTP)
 3) Agent aggregates results + memory and streams the response back
+
+## Block diagram (Agent, MCPs, Postgres)
+
+```mermaid
+flowchart LR
+  U[User / UI (Streamlit)] -->|"HTTP POST (/query/streaming)"| API[FastAPI]
+  API -->|"astream (tokens)"| AG[Agent (LangChain + LangGraph)]
+  AG -->|"MCP Tools"| MCP1[ddg-search]
+  AG -->|"MCP Tools"| MCP2[yfinance-tools]
+  MCP1 -->|"HTTP"| WEB[Web/News]
+  MCP2 -->|"Financial APIs"| YF[Yahoo Finance]
+  AG -->|"Checkpoint (medium term)"| PG1[(Postgres - Checkpointer)]
+  AG -->|"Store (long term)"| PG2[(Postgres - Store)]
+```
 
 Exposed MCP servers:
 - `ddg-search`: web search + page fetching (`search`, `fetch_content`).
@@ -211,6 +223,20 @@ Agente em PT‑BR para gerenciar portfólio de investimentos, orquestrado com La
 1) UI/cliente → API (`FastAPI`) → Agente (`LangGraph`)
 2) Agente → LLM + Ferramentas MCP (DDG/YFinance via HTTP)
 3) Agente agrega resultados + memória e streama a resposta ao cliente
+
+## Diagrama de blocos (Agente, MCPs, Postgres)
+
+```mermaid
+flowchart LR
+  U[User / UI (Streamlit)] -->|"HTTP POST (/query/streaming)"| API[FastAPI]
+  API -->|"astream (tokens)"| AG[Agent (LangChain + LangGraph)]
+  AG -->|"MCP Tools"| MCP1[ddg-search]
+  AG -->|"MCP Tools"| MCP2[yfinance-tools]
+  MCP1 -->|"HTTP"| WEB[Web/News]
+  MCP2 -->|"Financial APIs"| YF[Yahoo Finance]
+  AG -->|"Checkpoint (medium term)"| PG1[(Postgres - Checkpointer)]
+  AG -->|"Store (long term)"| PG2[(Postgres - Store)]
+```
 
 MCP Servers expostos:
 - `ddg-search`: busca web + leitura de páginas (`search`, `fetch_content`).

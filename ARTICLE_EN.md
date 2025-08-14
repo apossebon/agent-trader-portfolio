@@ -1,4 +1,4 @@
-# Building an Investment Agent with LangChain + LangGraph, MCP Servers, Postgres Memory, and Multi‑Container Cloud Deploy
+# Building a Trader Agent with LangChain + LangGraph, MCP Servers, Postgres Memory, and Multi‑Container Cloud Deploy
 
 I recently evolved the Agent Trader: a Portuguese-first portfolio assistant that combines LangChain and LangGraph (ReAct‑style orchestration) with MCP integrations (DuckDuckGo and Yahoo Finance), medium/long‑term memory in Postgres, and end‑to‑end streaming. This post shows how the pieces fit together, with real code snippets and an architecture diagram, plus how to package everything into multiple cloud‑ready containers.
 
@@ -64,7 +64,7 @@ This separation allows scaling, versioning, and auditing each capability indepen
 
 ## Postgres Memory: medium and long term
 
-- Checkpoint (medium‑term): keeps graph state and reasoning by `thread_id` via `AsyncPostgresSaver`.
+- Checkpoint (medium‑term as session memory): keeps graph state and reasoning by `thread_id` via `AsyncPostgresSaver`.
 - Store (long‑term): holds user “semantic” memory (e.g., portfolio) via `AsyncPostgresStore`, with namespaced keys.
 
 ```python
@@ -170,15 +170,15 @@ Production notes:
 ## Block diagram (Agent, MCPs, Postgres)
 
 ```mermaid
-graph LR
-  U[User / UI (Streamlit)] -->|HTTP POST (/query/streaming)| API[FastAPI]
-  API -->|astream (tokens)| AG[Agent (LangChain + LangGraph)]
-  AG -->|MCP Tools| MCP1[ddg-search]
-  AG -->|MCP Tools| MCP2[yfinance-tools]
-  MCP1 -->|HTTP| WEB[Web/News]
-  MCP2 -->|Financial APIs| YF[Yahoo Finance]
-  AG -->|Checkpoint (medium term)| PG1[(Postgres - Checkpointer)]
-  AG -->|Store (long term)| PG2[(Postgres - Store)]
+flowchart LR
+  U[User / UI (Streamlit)] -->|"HTTP POST (/query/streaming)"| API[FastAPI]
+  API -->|"astream (tokens)"| AG[Agent (LangChain + LangGraph)]
+  AG -->|"MCP Tools"| MCP1[ddg-search]
+  AG -->|"MCP Tools"| MCP2[yfinance-tools]
+  MCP1 -->|"HTTP"| WEB[Web/News]
+  MCP2 -->|"Financial APIs"| YF[Yahoo Finance]
+  AG -->|"Checkpoint (medium term)"| PG1[(Postgres - Checkpointer)]
+  AG -->|"Store (long term)"| PG2[(Postgres - Store)]
 ```
 
 ## Best practices and lessons learned
