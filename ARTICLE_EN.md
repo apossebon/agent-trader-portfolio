@@ -170,15 +170,15 @@ Production notes:
 ## Block diagram (Agent, MCPs, Postgres)
 
 ```mermaid
-flowchart LR
-  U[User / UI (Streamlit)] -->|"HTTP POST (/query/streaming)"| API[FastAPI]
-  API -->|"astream (tokens)"| AG[Agent (LangChain + LangGraph)]
-  AG -->|"MCP Tools"| MCP1[ddg-search]
-  AG -->|"MCP Tools"| MCP2[yfinance-tools]
-  MCP1 -->|"HTTP"| WEB[Web/News]
-  MCP2 -->|"Financial APIs"| YF[Yahoo Finance]
-  AG -->|"Checkpoint (medium term)"| PG1[(Postgres - Checkpointer)]
-  AG -->|"Store (long term)"| PG2[(Postgres - Store)]
+graph LR
+  U[User / UI - Streamlit] --> API[FastAPI]
+  API --> AG[Agent - LangChain + LangGraph]
+  AG --> MCP1[ddg-search]
+  AG --> MCP2[yfinance-tools]
+  MCP1 --> WEB[Web/News]
+  MCP2 --> YF[Yahoo Finance]
+  AG --> PG1[Postgres - Checkpointer]
+  AG --> PG2[Postgres - Store]
 ```
 
 ## Best practices and lessons learned
