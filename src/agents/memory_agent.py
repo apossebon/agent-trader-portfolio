@@ -27,7 +27,7 @@ class UserMemory(TypedDict):
 
 
 DATABASE_URL = os.getenv(
-    "POSTGRES_URL",
+    "POSTGRES_URL"
 )
 
 async def get_store()->tuple[AsyncPostgresSaver, AsyncPostgresStore]:

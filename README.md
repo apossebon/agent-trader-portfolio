@@ -82,7 +82,7 @@ python -m src.mcp_servers.duckduckgo_mcp_server.server --transport streamable-ht
 python -m src.mcp_servers.yfinance_mcp_server.server --transport streamable-http --host 0.0.0.0 --port 8002 --path /mcp
 ```
 
-3) FastAPI:
+3) FastAPI:dd
 ```bash
 uvicorn src.api.api:app --reload --host 0.0.0.0 --port 8000
 ```
@@ -203,7 +203,6 @@ python src/test_mcp.py
 —
 Contributions welcome via issues/PRs.
 
-# Agent Trader — Portfolio Assistant (PT-BR)
 # Agent Trader — Portfolio Assistant (PT-BR)
 
 Agente em PT‑BR para gerenciar portfólio de investimentos, orquestrado com LangGraph (ReAct), integrações via MCP (DuckDuckGo e Yahoo Finance), memória persistente em Postgres (curto e longo prazo) e streaming ponta‑a‑ponta até a UI.

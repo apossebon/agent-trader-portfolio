@@ -21,7 +21,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "psql postgresql://user_agent:pass_agent@localhost:5432/agent_db --command 'SELECT 1;' || exit 1",
+          "psql 'postgresql://user_agent:pass_agent@localhost:5432/agent_db' --command 'SELECT 1;' || exit 1",
         ]
       interval: 5s
       retries: 60
