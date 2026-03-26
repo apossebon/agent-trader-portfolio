@@ -19,12 +19,14 @@ RUN uv venv && uv pip install -r pyproject.toml
 # Full application stage
 FROM base as app
 COPY src/ src/
+RUN uv sync
 ENV PYTHONPATH="src:src"
 ENV PATH="/app/.venv/bin:$PATH"
 
 # MCP DuckDuckGo stage
 FROM base as mcp_servers
 COPY src/mcp_servers src/mcp_servers
+COPY src/llm src/llm
 RUN uv sync
 
 ENV PYTHONPATH="src:src"

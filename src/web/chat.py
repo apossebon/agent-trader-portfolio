@@ -23,7 +23,7 @@ def chat_stream(prompt):
     for char in prompt:
         char = char.replace("$", "\\$")
         yield char
-        time.sleep(0.001)
+        time.sleep(0.0025)
 
 
 def save_feedback(index):

@@ -146,8 +146,30 @@ searcher = DuckDuckGoSearcher()
 fetcher = WebContentFetcher()
 
 @mcp.tool()
-async def search(query: str, ctx: Context, max_results: int = 10) -> str:
-    """Search in Internet websites with DuckDuckGo and return formatted results. Can also be used to sentiment analysis of companies."""
+async def search(query: str, ctx: Context, max_results: int = 5) -> str:
+    """Search the internet using DuckDuckGo and return formatted results.
+    
+    This function performs web searches and can be used for various purposes including:
+    - General web searches for information
+    - Company sentiment analysis and news
+    - Market research and competitor analysis
+    - Technical documentation and tutorials
+    - Current events and news updates
+    
+    Args:
+        query (str): The search query string to look for on the internet
+        ctx (Context): The MCP context for logging and error handling
+        max_results (int, optional): Maximum number of search results to return. Defaults to 5.
+    
+    Returns:
+        str: Formatted search results containing title, URL, and snippet for each result.
+             Returns an error message if the search fails or no results are found.
+    
+    Examples:
+        - "AAPL stock news today" - for sentiment analysis
+        - "Python asyncio tutorial" - for technical information
+        - "Tesla earnings report 2024" - for financial research
+    """
     print(f"search: {query}, max_results: {max_results}")
     try:
         results = await searcher.search(query, ctx, max_results)

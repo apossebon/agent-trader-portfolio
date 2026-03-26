@@ -46,6 +46,12 @@ services:
     depends_on:
       pgvector:
         condition: service_healthy
+      mcp-duckduckgo:
+        condition: service_started
+      mcp-yfinance:
+        condition: service_started
+      mcp-postgres:
+        condition: service_started
     networks:
       trader-agent:
         aliases:
@@ -69,8 +75,7 @@ services:
       trader-agent:
         aliases:
           - mcp-duckduckgo
-    depends_on:
-      - app
+    
 
   mcp-yfinance:
     build:
@@ -86,8 +91,27 @@ services:
       trader-agent:
         aliases:
           - mcp-yfinance
+    
+
+  mcp-postgres:
+    build:
+      context: ../
+      dockerfile: .devcontainer/Dockerfile
+      target: mcp_servers
+    container_name: agent-trader-mcp-postgres
+    hostname: mcp-postgres
+    environment:
+      POSTGRES_URL: postgresql://postgres:Aap7978Po@halo-db.postgres.database.azure.com:5432/agent_db
+    ports:
+      - "8003:8003"
+    command: python -m src.mcp_servers.postgres_mcp_server.server --transport streamable-http --host 0.0.0.0 --port 8003
+    networks:
+      trader-agent:
+        aliases:
+          - mcp-postgres
     depends_on:
-      - app
+      pgvector:
+        condition: service_healthy
 
 networks:
   trader-agent:

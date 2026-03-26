@@ -93,6 +93,27 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             }
+        },{
+            "name": "MCP Server - Postgres",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.mcp_servers.postgres_mcp_server.server",
+            "justMyCode": true,
+            "jinja": true,
+            "args": [
+                "--transport",
+                "streamable-http",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8003",
+                "--path",
+                "/mcp"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
         }
 
 

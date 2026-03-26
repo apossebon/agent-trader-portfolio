@@ -17,7 +17,7 @@ async def find_ticker_tool(company_name: str) -> str:
     
     return find_ticker(company_name)
 
-@tool (description="Return the current stock price. Parameters: ticker = ticker of the stock (ex: PETR4.SA) and for dollar values use the ticker of the dollar (ex: USDBRL=X)", ) 
+@tool (description="Return the current stock price or currency cotation. Parameters: ticker = ticker of the stock or currency cotation (ex: PETR4.SA or EURBRL=X or USDBRL=X )", ) 
 async def get_stock_price_tool(ticker: str) -> str:
     return get_stock_price(ticker)
 
